@@ -13,7 +13,7 @@ For those who taking RHCSA, RHCE, this lab is for you!
 - axel *(Optional, to speed up base image download)*
 
 ## What will you get ?
-2 VM created in Virtual Box using CentOS 7 image. Default user is `student` with sudo-capability.
+2 VM created in Virtual Box using CentOS 7 image. Default user is `vagrant` with sudo-capability.
 
 ```bash
 - server.example.com[172.25.1.10]:

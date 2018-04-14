@@ -1,17 +1,14 @@
 Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
-      echo "server.example.com 172.25.1.10" >> /etc/hosts
-      echo "desktop.example.com 172.25.1.11" >> /etc/hosts
-   SHELL
+      echo "172.25.1.10 server.example.com smtp.example.com web.example.com server" >> /etc/hosts
+      echo "172.25.1.11 desktop.example.com dekstop" >> /etc/hosts
+  SHELL
 
   config.vm.define "server" do |instance|
     instance.vm.box = "centos/7"
     instance.vm.hostname = 'server'
-    instance.vm.box_url = "ubuntu/precise64"
     instance.vm.network :private_network, ip: "172.25.1.10"
-    instance.ssh.username = "student"
-
     instance.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 512]
@@ -29,9 +26,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "desktop" do |instance|
     instance.vm.box = "centos/7"
     instance.vm.hostname = 'desktop'
-    instance.vm.box_url = "ubuntu/precise64"
-    instance.ssh.username = "student"
-
     instance.vm.network :private_network, ip: "172.25.1.11"
 
     instance.vm.provider :virtualbox do |v|

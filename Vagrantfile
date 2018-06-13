@@ -2,13 +2,15 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
       echo "172.25.1.10 server.example.com smtp.example.com web.example.com server" >> /etc/hosts
-      echo "172.25.1.11 desktop.example.com dekstop" >> /etc/hosts
+      echo "172.25.1.11 desktop.example.com desktop" >> /etc/hosts
   SHELL
 
   config.vm.define "server" do |instance|
     instance.vm.box = "centos/7"
     instance.vm.hostname = 'server'
-    instance.vm.network :private_network, ip: "172.25.1.10"
+    instance.vm.synced_folder '.', '/vagrant', disabled: true
+    instance.vm.network :private_network, ip: "172.17.0.10"
+    instance.vm.network :private_network, type: "dhcp", auto_config: false
     instance.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 512]
@@ -26,7 +28,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "desktop" do |instance|
     instance.vm.box = "centos/7"
     instance.vm.hostname = 'desktop'
-    instance.vm.network :private_network, ip: "172.25.1.11"
+    instance.vm.synced_folder '.', '/vagrant', disabled: true
+    instance.vm.network :private_network, ip: "172.17.0.11"
+    instance.vm.network :private_network, type: "dhcp", auto_config: false
 
     instance.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
